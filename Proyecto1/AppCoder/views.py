@@ -11,10 +11,10 @@ def cursos(request):
     return render(request, "AppCoder/cursos.html")
 
 def profesores(request):
-    return("Vista profesores")
+    return render(request, "AppCoder/profesores.html")
 
 def estudiantes(request):
-    return("Vista estudiantes")
+    return render(request, "AppCoder/estudiantes.html")
 
 def entregables(request):
-    return("Vista entregables")
+    return render(request, "AppCoder/entregables.html")
