@@ -65,6 +65,7 @@ def editarEstudiante(request, nombre_estudiante):
     if request.method == 'POST':
         miFormulario = formSetEstudiante(request.POST)
         if miFormulario.is_valid:
+            print(miFormulario)
             data = miFormulario.cleaned_data
 
             estudiante.nombre = data['nombre']
@@ -75,5 +76,5 @@ def editarEstudiante(request, nombre_estudiante):
             Estudiantes = Estudiante.objects.all()
             return render(request, "AppCoder/setEstudiantes.html", {"miFormulario":miFormulario, "Estudiantes":Estudiantes})
     else:
-        miFormulario = formSetEstudiante()
+        miFormulario = formSetEstudiante(initial={'nombre': estudiante.nombre, 'apellido': estudiante.apellido, 'email': estudiante.email})
     return render(request, "AppCoder/editarEstudiante.html", {"miFormulario":miFormulario})
