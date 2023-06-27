@@ -3,16 +3,15 @@
     {% load static %}
     
     {% block setEstudiante %}
-        <p>Crear Estudiante</p>
         <form action="/AppCoder/setEstudiante/" method="post"> {% csrf_token %}
-            <table>
+            <!--table>
                 {{ miFormulario.as_table }}
-            </table>
-            <!--input placeholder="Nombre" type = "text" name="nombre" required>
+            </table-->
+            <input placeholder="Nombre" type = "text" name="nombre" required>
             <input placeholder="Apellido" type = "text" name="apellido" required>
-            <input placeholder="Email" type = "email" name="email" required-->
+            <input placeholder="Email" type = "email" name="email" required>
 
-            <input type = "submit" value="Enviar">
+            <input class="btn btn-primary" type="submit" value="Enviar">
         </form>
         
         <!--p>

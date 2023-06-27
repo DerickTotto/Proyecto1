@@ -3,7 +3,26 @@
     {% load static %}
     
         {% block contenidoQueCambia %}
-            <p>Estudiantes</p>
+            <p>Estudiantes Disponibles</p>
+            <table id="tableInfoEstudiantes">
+                <tr id="tituloTablaEstudiantes">
+                    <th>Nombre</th>
+                    <th>Apellido</th>
+                    <th>Correo</th>
+                    <th>Eliminar</th>
+                    <th>Editar</th>
+                </tr>
+                
+                    {% for estudiante in Estudiantes%}
+                        <tr>
+                            <td>{{estudiante.nombre}}</td>
+                            <td>{{estudiante.apellido}}</td>
+                            <td>{{estudiante.email}}</td>
+                            <td><button class="btn btn-danger btnEliminar"><a href="{% url 'eliminarEstudiante' estudiante.nombre %}">X</a></button></td>
+                            <td><button class="btn btn-warning btnEditar"><a href="{% url 'editarEstudiante' estudiante.nombre %}">Editar</a></button></td>
+                        </tr>
+                    {% endfor %}  
+            </table>
             <div class="formSetEstudiante">
                 {% block setEstudiante %}
                 {% endblock %}
