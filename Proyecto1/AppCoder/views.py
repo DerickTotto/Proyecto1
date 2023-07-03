@@ -105,3 +105,7 @@ def registro(request):
     else:
         return render(request, 'AppCoder/registro.html')
 
+@login_required  
+def perfilview(request):
+    return render(request, 'AppCoder/Perfil/Perfil.html')
+

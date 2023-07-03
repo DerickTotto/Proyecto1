@@ -1,0 +1,14 @@
+{% extends "../inicio.html" %}
+{% load static %}
+
+{% block contenidoQueCambia %}
+    <div>
+        <ul>
+            <li>{{user.username}}</li>
+            <li>{{user.email}}</li>
+            <li>{{user.first_name}}</li>
+            <li>{{user.last_name}}</li>
+        </ul>
+        <a href="/AppCoder/Perfil/editarPerfil" class="btn btn-success" style="text-decoration: none; color: white;"> Editar Perfil</a>
+    </div>
+{% endblock %}
