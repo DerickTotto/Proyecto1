@@ -1,8 +1,8 @@
 from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
-from AppCoder.models import Estudiante
-from AppCoder.forms import formSetEstudiante, UserEditForm, ChangePasswordForm
+from AppCoder.models import Estudiante, Avatar
+from AppCoder.forms import formSetEstudiante, UserEditForm, ChangePasswordForm, AvatarForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
 from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
@@ -13,7 +13,8 @@ from django.contrib.auth.models import User
 
 @login_required
 def inicio(request):
-    return render(request, "AppCoder/inicio.html")
+    avatar = getavatar(request)
+    return render(request, "AppCoder/inicio.html", {"avatar": avatar})
 
 def cursos(request):
     return render(request, "AppCoder/cursos.html")
@@ -143,4 +144,32 @@ def changePassword(request):
         return render(request, 'AppCoder/Perfil/changePassword.html', {"form": form})
 
 def editAvatar(request):
-    pass
+    if request.method == 'POST':
+        form = AvatarForm(request.POST, request.FILES)
+        print(form)
+        print(form.is_valid())
+        if form.is_valid():
+            user = User.objects.get(username = request.user)
+            avatar = Avatar(user = user, image = form.cleaned_data['avatar'], id = request.user.id)
+            avatar.save()
+            avatar = Avatar.objects.filter(user = request.user.id)
+            try:
+                avatar = avatar[0].image.url
+            except:
+                avatar = None           
+            return render(request, "AppCoder/inicio.html", {'avatar': avatar})
+    else:
+        try:
+            avatar = Avatar.objects.filter(user = request.user.id)
+            form = AvatarForm()
+        except:
+            form = AvatarForm()
+    return render(request, 'AgregarAvatar.html', {'form': form})
+
+def getavatar(request):
+    avatar = Avatar.objects.filter(user = request.user.id)
+    try:
+        avatar = avatar[0].image.url
+    except:
+        avatar = None
+    return avatar
