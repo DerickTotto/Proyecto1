@@ -25,3 +25,4 @@ class Entregable(models.Model):
     nombre = models.CharField(max_length=30)
     fechaDeEntrega = models.DateField()
     entregada = models.BooleanField()
+

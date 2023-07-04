@@ -2,10 +2,11 @@ from django.http import HttpResponse
 from django.template import loader
 from django.shortcuts import render
 from AppCoder.models import Estudiante
-from AppCoder.forms import formSetEstudiante
+from AppCoder.forms import formSetEstudiante, UserEditForm, ChangePasswordForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
-from django.contrib.auth import login, logout, authenticate
+from django.contrib.auth import login, logout, authenticate, update_session_auth_hash
 from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
 
 
 # Create your views here.
@@ -109,3 +110,37 @@ def registro(request):
 def perfilview(request):
     return render(request, 'AppCoder/Perfil/Perfil.html')
 
+@login_required  
+def editarPerfil(request):
+    usuario = request.user
+    user_basic_info = User.objects.get(id = usuario.id)
+    if request.method == "POST":
+        form = UserEditForm(request.POST, instance = usuario)
+        if form.is_valid():
+            user_basic_info.username = form.cleaned_data.get('username')
+            user_basic_info.email = form.cleaned_data.get('email')
+            user_basic_info.first_name = form.cleaned_data.get('first_name')
+            user_basic_info.last_name = form.cleaned_data.get('last_name')
+            user_basic_info.save()
+            return render(request, 'AppCoder/Perfil/Perfil.html')
+    else:
+        form = UserEditForm(initial= {'username': usuario.username, 'email': usuario.email, 'first_name': usuario.first_name, 'last_name': usuario.last_name })
+        return render(request, 'AppCoder/Perfil/editarPerfil.html', {"form": form})
+
+@login_required
+def changePassword(request):
+    usuario = request.user    
+    if request.method == "POST":
+        form = ChangePasswordForm(data = request.POST, user = usuario)
+        if form.is_valid():
+            if request.POST['new_password1'] == request.POST['new_password2']:
+                user = form.save()
+                update_session_auth_hash(request, user)
+            return HttpResponse("Las constraseñas no coinciden")
+        return render(request, "AppCoder/inicio.html")
+    else:
+        form = ChangePasswordForm(user = usuario)
+        return render(request, 'AppCoder/Perfil/changePassword.html', {"form": form})
+
+def editAvatar(request):
+    pass
