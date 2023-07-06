@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.template import loader
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from AppCoder.models import Estudiante, Avatar
 from AppCoder.forms import formSetEstudiante, UserEditForm, ChangePasswordForm, AvatarForm
 from django.contrib.auth.forms import AuthenticationForm, UserCreationForm
@@ -92,7 +92,7 @@ def loginWeb(request):
         user = authenticate(username = request.POST['user'], password = request.POST['password'])
         if user is not None:
             login(request, user)
-            return render(request,"AppCoder/inicio.html")
+            return redirect("../inicio")
         else:
             return render(request, 'AppCoder/login.html', {'error': 'Usuario o contraseña incorrectos'})
     else:
@@ -164,7 +164,7 @@ def editAvatar(request):
             form = AvatarForm()
         except:
             form = AvatarForm()
-    return render(request, 'AgregarAvatar.html', {'form': form})
+    return render(request, "AppCoder/Perfil/avatar.html", {'form': form})
 
 def getavatar(request):
     avatar = Avatar.objects.filter(user = request.user.id)
